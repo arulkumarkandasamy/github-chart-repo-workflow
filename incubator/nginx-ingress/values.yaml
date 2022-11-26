@@ -1,0 +1,85 @@
+# Default values for nginx-ingress.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: "quay.io/kubernetes-ingress-controller/nginx-ingress-controller"
+  tag: "0.15.0"
+  pullPolicy: "IfNotPresent"
+
+service:
+  name: nginx
+  type: LoadBalancer
+  externalHttpPort: 80
+  externalHttpsPort: 443
+  internalHttpPort: 80
+  internalHttpsPort: 443
+  internalHealthzPort: 18080
+  httpTargetPort: http
+  httpsTargetPort: https
+  httpIngressEnabled: true
+  httpsIngressEnabled: true
+## If you have custom annotations they go here, for example:
+#  annotations:
+#    service.beta.kubernetes.io/aws-load-balancer-extra-security-groups: "sg-1234567890"
+#    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
+#    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: https
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+useProxyProtocol: true
+
+# Error codes that we should intercept in order to display a pretty error page
+customHttpErrors:
+  client:
+    - "404"
+  server:
+    - "500"
+    - "502"
+    - "503"
+    - "504"
+
+## If you are using any additional nginx configmap customization, those values go here
+configMap:
+  options:
+    ## This is a default value and accepts a CIDR range, if you have multiple values they should be comma separated
+    nginx-status-ipv4-whitelist: "127.0.0.1"
+
+nginx-default-backend:
+  replicaCount: 1
+  image:
+    repository: nginx
+    tag: alpine
+    pullPolicy: IfNotPresent
+  service:
+    name: nginx
+    type: ClusterIP
+    externalPort: 80
+    internalPort: 8080
+  resources:
+    limits:
+      cpu: 10m
+      memory: 20Mi
+    requests:
+      cpu: 10m
+      memory: 20Mi
+  errors:
+    configmap: default
+    default:
+      email: hello@cloudposse.com
+      site: http://cloudposse.com
+    client:
+      - "404"
+    server:
+      - "500"
+      - "502"
+      - "503"
+      - "504"

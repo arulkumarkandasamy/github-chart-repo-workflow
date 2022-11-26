@@ -1,0 +1,22 @@
+apiVersion: v1
+description: |-
+  Use GitHub teams to manage system user accounts and authorized_keys.
+  WARNING: 
+  * We recommend that you install this chart into the `kube-system` namespace.
+  * There should only be one installation per cluster (other releases will fail because of name conflict)
+name: github-authorized-keys
+version: 0.2.2
+keywords:
+- ssh
+- github
+- pam
+- authentication
+- authorized_keys
+home: http://cloudposse.com
+sources:
+- https://github.com/cloudposse/github-authorized-keys
+- https://github.com/cloudposse/charts/tree/master/incubator/library/github-authorized-keys
+maintainers:
+- name: Cloud Posse
+  email: hello@cloudposse.com
+engine: gotpl
